@@ -1,13 +1,15 @@
-export enum CrunchyRoute {
+/*export enum CrunchyRoute {
     HOME = "/",
     ITEMS = "/items",
-    PROFILE = "/profile",
-    ADMIN = "/admin",
-}
+    SETTINGS = "/settings",
+    SETTINGS_PROFILE = "/settings/profile",
+    SETTINGS_ADMIN = "settings/admin",
+}*/
 
 enum Views {
     HOME,
     ITEMS,
+    SETTINGS,
     PROFILE,
     ADMIN,
 }
@@ -30,13 +32,20 @@ class CrunchyPaths {
             path: "/items",
         },
         {
-            id: Views.PROFILE,
-            path: "/profile",
+            id: Views.SETTINGS,
+            path: "/settings",
+            children: [
+                {
+                    id: Views.PROFILE,
+                    path: "/profile",
+                },
+                {
+                    id: Views.ADMIN,
+                    path: "/admin",
+                }
+            ]
         },
-        {
-            id: Views.ADMIN,
-            path: "/admin",
-        }
+        
     ];
 
     static getPath = (id: Views, type: "relative" | "absolute" = "absolute"): string => {
