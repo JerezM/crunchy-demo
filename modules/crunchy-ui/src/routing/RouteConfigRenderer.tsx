@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import { RouteDefinition } from "../App.routes";
 import { Route, Routes } from "react-router-dom";
+import { NotFoundPage } from "../components/NotFoundPage";
 
 interface RouteConfigRendererProps {
     routes: RouteDefinition[];
@@ -22,7 +23,7 @@ export const RouteConfigRenderer: FunctionComponent<RouteConfigRendererProps> = 
                 return (<>
                     <Route key={index} index element={route.element} />
                     <Route key={index * index} path={route.path} element={route.element} />
-                    <Route key={index * index + 1} path={'*'} element={<></>} />
+                    <Route key={index * index + 1} path={'*'} element={<NotFoundPage/>} />
                 </>);
             } else {
                 // For routes without index, only create a <Route> with a 'path'
@@ -35,7 +36,8 @@ export const RouteConfigRenderer: FunctionComponent<RouteConfigRendererProps> = 
         <Routes>
             {routes.map((route, index) => (
                 createTree(route, index)
-            ))}            
+            ))}  
+            <Route path={'*'} element={<NotFoundPage/>} />          
         </Routes>        
     );
 };
