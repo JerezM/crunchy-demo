@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
-import { TText } from "./utils/Texts";
-import { TextType } from "../model/utils/TextType";
+import { TText } from "../utils/Texts";
+import { TextType } from "../../model/utils/TextType";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export const Profile: FunctionComponent = () => {
