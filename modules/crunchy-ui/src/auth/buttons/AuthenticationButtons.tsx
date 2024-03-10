@@ -1,17 +1,22 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useMemo } from "react";
 import { LoginButton } from "./LoginButton";
 import { RegisterButton } from "./RegisterButton";
 import { LogoutButton } from "./LogoutButton";
 import { useAuth0 } from "@auth0/auth0-react";
 
-
 export const AuthenticationButtons: FunctionComponent = () => {
 
     const { isAuthenticated } = useAuth0();
 
-    return (
-        <ul style={{listStyle: 'none', display: 'flex'}}>
-            {!isAuthenticated ?
+    const btnsToRender = useMemo(() => {
+        if (isAuthenticated) {
+            return (
+                <li>
+                    <LogoutButton/>
+                </li>
+            );
+        } else {
+            return (
                 <>                
                     <li>
                         <LoginButton/>
@@ -20,11 +25,13 @@ export const AuthenticationButtons: FunctionComponent = () => {
                         <RegisterButton/>
                     </li>
                 </>
-            :
-                <li>
-                    <LogoutButton/>
-                </li>
-            }
+            );
+        }
+    }, [isAuthenticated]);
+
+    return (
+        <ul style={{listStyle: 'none', display: 'flex'}}>
+            {btnsToRender}
         </ul> 
     );
 }

@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 import { RouteDefinition } from "../App.routes";
 import { Route, Routes } from "react-router-dom";
 import { NotFoundPage } from "../components/NotFoundPage";
+import CallbackPage from "../components/CallbackPage";
 
 interface RouteConfigRendererProps {
     routes: RouteDefinition[];
@@ -36,8 +37,9 @@ export const RouteConfigRenderer: FunctionComponent<RouteConfigRendererProps> = 
         <Routes>
             {routes.map((route, index) => (
                 createTree(route, index)
-            ))}  
-            <Route path={'*'} element={<NotFoundPage/>} />          
+            ))}
+            <Route path={'/callback'} element={<CallbackPage/>} />
+            <Route path={'*'} element={<NotFoundPage/>}/>          
         </Routes>        
     );
 };
