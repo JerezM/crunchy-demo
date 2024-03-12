@@ -25,7 +25,7 @@ export default function Settings({routes}: SettingsProps) {
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
             <div style={{ width: '250px', backgroundColor: Colors.SIDE_BAR, padding: '20px', display: 'flex', flexDirection: 'column'}}>
-                {routes?.map((route, index) => (
+                {routes?.map((route, index) => (/*.filter(route => !route.needAdmin)*/ // TODO refactor when roles are applied
                     <NavLink key={index} to={route.path?.toString() as string} style={{textDecoration: 'none', marginBottom: '5px'}}>
                         <TText type={TextType.HEADER2} style={{color: "white", textAlign: 'center'}}>{route.routeResource?.label}</TText>
                     </NavLink>

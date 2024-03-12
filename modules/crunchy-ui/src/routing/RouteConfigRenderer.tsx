@@ -3,6 +3,7 @@ import { RouteDefinition } from "../App.routes";
 import { Route, Routes } from "react-router-dom";
 import { NotFoundPage } from "../components/NotFoundPage";
 import CallbackPage from "../components/CallbackPage";
+import { AuthenticationGuard } from "../auth/AuthenticationGuard";
 
 interface RouteConfigRendererProps {
     routes: RouteDefinition[];
@@ -10,11 +11,28 @@ interface RouteConfigRendererProps {
 
 export const RouteConfigRenderer: FunctionComponent<RouteConfigRendererProps> = ({routes}) => {
     
+    const getElement = (route: RouteDefinition) => {
+        if (route.element) {
+            return checkAuthenticationWrap(route, route.needAuthentication ?? false);
+        } else {
+            return checkAuthenticationWrap(route, route.needAuthentication ?? false, true);
+        }
+    }
+
+    const checkAuthenticationWrap = (route: RouteDefinition, needAuthentication: boolean, isComponent?: boolean) => {
+        const RouteComponent = route.Component as React.ComponentType<any>;
+        if (needAuthentication) {
+            return isComponent ? <AuthenticationGuard component={() => <RouteComponent {...route as any}/> }/> : <AuthenticationGuard component={() => <>{ route.element }</>}/> 
+        } else {
+            return isComponent ? <RouteComponent {...route as any}/> : route.element;
+        }
+    }
+
     const createTree = (route: RouteDefinition, index: number): JSX.Element => {
         // If the route has nested routes, first create a component <Route> for the parent route
         if (route.routes) {
             return (                
-                <Route key={index} path={route.path} element={route.element ? route.element : (route.Component && <route.Component {...route as any}/>)}>                    
+                <Route key={index} path={route.path} element={getElement(route)/*route.element ? route.element : (route.Component && <route.Component {...route as any}/>)*/}>                    
                     {route.routes.map((childRoute, index) => createTree(childRoute, index))}
                 </Route>
             );
@@ -23,12 +41,12 @@ export const RouteConfigRenderer: FunctionComponent<RouteConfigRendererProps> = 
             if (route.isIndex) {                
                 return (<>
                     <Route key={index} index element={route.element} />
-                    <Route key={index * index} path={route.path} element={route.element} />
+                    <Route key={index * index} path={route.path} element={getElement(route)/*route.element*/} />
                     <Route key={index * index + 1} path={'*'} element={<NotFoundPage/>} />
                 </>);
             } else {
                 // For routes without index, only create a <Route> with a 'path'
-                return <Route key={index} path={route.path} element={route.element} />;
+                return <Route key={index} path={route.path} element={getElement(route)/*route.element*/} />;
             }
         }
     }

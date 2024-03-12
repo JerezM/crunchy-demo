@@ -12,7 +12,7 @@ const CallbackPage: FC = () => {
         }
     }, [navigate]);
 
-    return null;   
+    return <></>;   
 };
   
 export default CallbackPage;

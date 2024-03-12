@@ -7,13 +7,13 @@ import { Admin } from "./components/settings/Admin";
 import Settings from "./components/settings/Settings";
 import { AuthenticationGuard } from "./auth/AuthenticationGuard";
 
-
 interface CustomRouteProps {
     routeResource?: RouteResource;
     routes?: RouteDefinition[];
     // Is used to indicate when a child route is the default route of a nested routes.
-    isIndex?: boolean;
-    showOnlyAuthenticated?: boolean;
+    isIndex?: boolean;// Defines if the route is index.
+    needAuthentication?: boolean;// Will add the AuthenticationGuard to the route with this flag.
+    //needAdmin?: boolean; // Only display the route is the user is authenticated with an admin user
 }
 
 interface RouteResource {
@@ -34,7 +34,7 @@ const getRoutes = (): RouteDefinition[] => ([
     {
         path: CrunchyPaths.getPath(Views.ITEMS),
         element: <AuthenticationGuard component={Todolist}/>,
-        showOnlyAuthenticated: true,
+        needAuthentication: true,        
         routeResource: {
             label: "Items"
         },
@@ -42,7 +42,7 @@ const getRoutes = (): RouteDefinition[] => ([
     {
         path: CrunchyPaths.getPath(Views.SETTINGS),
         Component: Settings,
-        showOnlyAuthenticated: true,
+        needAuthentication: true,
         routeResource: {
             label: "Settings"
         },
@@ -58,6 +58,7 @@ const getRoutes = (): RouteDefinition[] => ([
             {
                 path: CrunchyPaths.getPath(Views.ADMIN),
                 element: <AuthenticationGuard component={Admin}/>,
+                //needAdmin: true,
                 routeResource: {
                     label: "Admin"
                 },
