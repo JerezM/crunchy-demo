@@ -1,17 +1,32 @@
+import { useAuthToken } from "./useAuthToken";
 
 
 export default class EntityService {
     private baseUrl: string;
+    private authToken: string | null;
 
     constructor(endpoint: string) {
         this.baseUrl = process.env.REACT_APP_BACKEND_URL as string ?? "http://localhost:8080/api";
         this.baseUrl = this.baseUrl + endpoint;
+        this.authToken = null;
     }
 
-    private prepareRequest(httpMethod: string, bodyObject?: object): RequestInit {
+    private async initializeTokens() {
+        const { getToken } = useAuthToken();
+        this.authToken = await getToken();
+    }
+
+    private async prepareRequest(httpMethod: string, bodyObject?: object): Promise<RequestInit> {
+        if (!this.authToken) {
+            await this.initializeTokens();
+        }
+
         const requestOptions: RequestInit = {
             method: httpMethod,
-            headers: {'Content-type': 'application/json'},
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${this.authToken}`,
+            },
             body: bodyObject ? JSON.stringify(bodyObject) : null,
         };
 
@@ -37,12 +52,12 @@ export default class EntityService {
     }
 
     protected async get<T>(endpoint?: string, params?: Record<string, string>, body?: object): Promise<T> {
-        const request = this.prepareRequest("GET", body);
+        const request = await this.prepareRequest("GET", body);
         return this.executeRequest(request, endpoint, params);
     }
 
     protected async put<T>(endpoint?: string, params?: Record<string, string>, body?: object): Promise<T> {
-        const request = this.prepareRequest("PUT", body);
+        const request = await this.prepareRequest("PUT", body);
         return this.executeRequest(request, endpoint, params);
     }
 }
