@@ -41,6 +41,33 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Spring Boot Security Config -->
+		 <dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			 <version>6.2.2</version>
+		</dependency>
+
+		<!-- Spring Boot Security Web -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>6.2.2</version>
+		</dependency>
+		<!--
+		<!- Spring Boot Starter OAuth2 Client -
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+		</dependency>
+
+		<!- JSON Web Token Support -
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+		</dependency>
+		-->
 	</dependencies>
 
 	<build>
