@@ -1,4 +1,4 @@
-import { useAuthToken } from "./useAuthToken";
+//import { useAuthToken } from "../hooks/useAuthToken";
 
 
 export default class EntityService {
@@ -12,8 +12,8 @@ export default class EntityService {
     }
 
     private async initializeTokens() {
-        const { getToken } = useAuthToken();
-        this.authToken = await getToken();
+        //const { getToken } = useAuthToken();
+        //this.authToken = await getToken();
     }
 
     private async prepareRequest(httpMethod: string, bodyObject?: object): Promise<RequestInit> {
