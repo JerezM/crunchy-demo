@@ -13,16 +13,17 @@ export const useAuthEntityService = (props: useAuthEntityServiceProps)  => {
     const { getToken } = useAuthToken();
 
     const prepareRequest = async (httpMethod: string, bodyObject?: object): Promise<RequestInit> => {
-        if (!authToken) {
-            const jwt = await getToken();
-            setAuthToken(jwt);
+        let jwtToken = authToken;
+        if (!jwtToken) {
+            jwtToken = await getToken();
+            setAuthToken(jwtToken);            
         }
 
         const requestOptions: RequestInit = {
             method: httpMethod,
             headers: {
                 'Content-type': 'application/json',
-                //'Authorization': `Bearer ${authToken}`,
+                'Authorization': `Bearer ${jwtToken}`,
             },
             body: bodyObject ? JSON.stringify(bodyObject) : null,
         };
@@ -40,7 +41,13 @@ export const useAuthEntityService = (props: useAuthEntityServiceProps)  => {
                 throw new Error(errorMsg);
             }
 
-            return await response.json() as T; 
+            const contentType = response.headers.get('Content-Type');
+            if (contentType && contentType.includes('application/json')) {
+                return await response.json() as T;
+            } else {
+                return {} as T;
+            }
+            
         } catch (error) {
             console.error(error);
             throw error;
@@ -52,10 +59,20 @@ export const useAuthEntityService = (props: useAuthEntityServiceProps)  => {
         return executeRequest(request, endpoint, params);
     }
 
+    const post = async <T>(endpoint?: string, params?: Record<string, string>, body?: object): Promise<T> => {
+        const request = await prepareRequest("POST", body);
+        return executeRequest(request, endpoint, params);
+    }
+
     const put = async <T>(endpoint?: string, params?: Record<string, string>, body?: object): Promise<T> => {
         const request = await prepareRequest("PUT", body);
         return executeRequest(request, endpoint, params);
     }
 
-    return { get, put };
+    const del = async <T>(endpoint?: string, params?: Record<string, string>, body?: object): Promise<T> => {
+        const request = await prepareRequest("DELETE", body);
+        return executeRequest(request, endpoint, params);
+    }
+
+    return { get, post, put, del };
 }

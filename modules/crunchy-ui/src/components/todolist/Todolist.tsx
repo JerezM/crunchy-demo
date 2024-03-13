@@ -5,6 +5,7 @@ import { TodolistItem } from "./TodolistItem";
 import '../../styles/todolist.css';
 import { Item } from "../../model/todolist/Item";
 import { useTodolistService } from "../../services/useTodolistService";
+import Button from "@mui/material/Button";
 
 interface TodolistProps {}
 
@@ -17,11 +18,15 @@ export const Todolist: FunctionComponent<TodolistProps> = () => {
     useEffect(() => {
         getAllItems()
             .then(items => setItems(items));        
-    },[getAllItems]);
+    },[]);
 
     const handleChangeOnAddItem = (event: React.ChangeEvent<HTMLInputElement>) => {
         setItemToAddContent(event.target.value);
     };
+
+    const handleAddItem = () => {
+        
+    }
 
     return (
         <div className="todolist">
@@ -35,8 +40,9 @@ export const Todolist: FunctionComponent<TodolistProps> = () => {
             </div>
             <div className="add-item">
                 <input className="add-item-input" type="text" placeholder="New Task" value={itemToAddContent} onChange={handleChangeOnAddItem}/>
-                <button>Add</button>
+                <Button onClick={handleAddItem}>Add</Button> 
             </div>
+            
         </div>
     );
 }
