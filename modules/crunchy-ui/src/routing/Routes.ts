@@ -12,6 +12,7 @@ enum Views {
     SETTINGS,
     PROFILE,
     ADMIN,
+    NOT_FOUND,
 }
 
 interface PathNode {
@@ -45,7 +46,10 @@ class CrunchyPaths {
                 }
             ]
         },
-        
+        {
+            id: Views.NOT_FOUND,
+            path: "/not-found",
+        },        
     ];
 
     static getPath = (id: Views, type: "relative" | "absolute" = "absolute"): string => {

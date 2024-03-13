@@ -4,12 +4,15 @@ import { Route, Routes } from "react-router-dom";
 import { NotFoundPage } from "../components/NotFoundPage";
 import CallbackPage from "../components/CallbackPage";
 import { AuthenticationGuard } from "../auth/AuthenticationGuard";
+import { useUserRoles } from "../hooks/useUserRoles";
 
 interface RouteConfigRendererProps {
     routes: RouteDefinition[];
 }
 
 export const RouteConfigRenderer: FunctionComponent<RouteConfigRendererProps> = ({routes}) => {
+
+    const { containRoles } = useUserRoles();
     
     const getElement = (route: RouteDefinition) => {
         if (route.element) {
@@ -29,6 +32,10 @@ export const RouteConfigRenderer: FunctionComponent<RouteConfigRendererProps> = 
     }
 
     const createTree = (route: RouteDefinition, index: number): JSX.Element => {
+        if (route.rolesNeeded && !containRoles(route.rolesNeeded)) {
+            return <></>;
+        } 
+
         // If the route has nested routes, first create a component <Route> for the parent route
         if (route.routes) {
             return (                
@@ -57,6 +64,7 @@ export const RouteConfigRenderer: FunctionComponent<RouteConfigRendererProps> = 
                 createTree(route, index)
             ))}
             <Route path={'/callback'} element={<CallbackPage/>} />
+            <Route path={'/not-found'} element={<NotFoundPage/>}/>
             <Route path={'*'} element={<NotFoundPage/>}/>          
         </Routes>        
     );

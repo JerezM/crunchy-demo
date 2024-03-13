@@ -6,19 +6,18 @@ import { Profile } from "./components/settings/Profile";
 import { Admin } from "./components/settings/Admin";
 import Settings from "./components/settings/Settings";
 import { AuthenticationGuard } from "./auth/AuthenticationGuard";
+import { Roles } from "./model/Roles";
 
 interface CustomRouteProps {
     routeResource?: RouteResource;
     routes?: RouteDefinition[];
-    // Is used to indicate when a child route is the default route of a nested routes.
-    isIndex?: boolean;// Defines if the route is index.
+    isIndex?: boolean;// Defines if the route is index. Is used to indicate when a child route is the default route of a nested routes.
     needAuthentication?: boolean;// Will add the AuthenticationGuard to the route with this flag.
-    //needAdmin?: boolean; // Only display the route is the user is authenticated with an admin user
+    rolesNeeded?: Roles[]; // Only display the route is the user is authenticated with an admin role
 }
 
 interface RouteResource {
     label?: string;
-    // Here I can also add the roles related to each route
 }
 
 type RouteDefinition = RouteProps & CustomRouteProps;
@@ -58,7 +57,7 @@ const getRoutes = (): RouteDefinition[] => ([
             {
                 path: CrunchyPaths.getPath(Views.ADMIN),
                 element: <AuthenticationGuard component={Admin}/>,
-                //needAdmin: true,
+                rolesNeeded: [Roles.ADMIN],
                 routeResource: {
                     label: "Admin"
                 },
