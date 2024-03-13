@@ -5,9 +5,9 @@ interface useAuthEntityServiceProps {
     endpoint: string;
 }
 
-export const useAuthEntityService = ({endpoint}: useAuthEntityServiceProps)  => {
+export const useAuthEntityService = (props: useAuthEntityServiceProps)  => {
 
-    const baseUrl = process.env.REACT_APP_BACKEND_URL as string ?? "http://localhost:8080/api" + endpoint;
+    const baseUrl = process.env.REACT_APP_BACKEND_URL as string ?? "http://localhost:8080/api";
     
     const [authToken, setAuthToken] = useState<string | null>(null);
     const { getToken } = useAuthToken();
@@ -22,7 +22,7 @@ export const useAuthEntityService = ({endpoint}: useAuthEntityServiceProps)  => 
             method: httpMethod,
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${authToken}`,
+                //'Authorization': `Bearer ${authToken}`,
             },
             body: bodyObject ? JSON.stringify(bodyObject) : null,
         };
@@ -32,8 +32,7 @@ export const useAuthEntityService = ({endpoint}: useAuthEntityServiceProps)  => 
 
     const executeRequest = async <T>(request: RequestInit, endpoint?: string, params?: Record<string, string>): Promise<T> => {
         const queryParams = new URLSearchParams(params).toString();
-        const requestUrl: string = baseUrl + (endpoint ?? '') + (params ? `?${queryParams}` : '');
-
+        const requestUrl: string = baseUrl + props.endpoint + (endpoint ?? '') + (params ? `?${queryParams}` : '');        
         try {
             const response = await fetch(requestUrl, request);
             if (!response.ok) {

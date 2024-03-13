@@ -5,7 +5,7 @@ import { Button, Checkbox, Tooltip } from "@mui/material";
 import { Colors } from "../../utils/Colors";
 import '../../styles/todolist-item.css';
 import { Item } from "../../model/todolist/Item";
-import TodolistService from "../../services/TodolistService";
+import { useTodolistService } from "../../services/useTodolistService";
 
 interface TodolistItemProps {
     item: Item;
@@ -16,9 +16,11 @@ export const TodolistItem: FunctionComponent<TodolistItemProps> = ({item}) => {
     const [content] = useState<string>(item.content);
     const [isCheck, setIsCheck] = useState<boolean>(item.done);
 
+    const { checkItem } = useTodolistService();
+
     const onCheck = () => {
         setIsCheck(prev => !prev);
-        TodolistService.checkItem(item.id);
+        checkItem(item.id);
     }
 
     return (

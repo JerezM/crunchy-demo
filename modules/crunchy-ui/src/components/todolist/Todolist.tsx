@@ -4,7 +4,7 @@ import { TextType } from "../../model/utils/TextType";
 import { TodolistItem } from "./TodolistItem";
 import '../../styles/todolist.css';
 import { Item } from "../../model/todolist/Item";
-//import { useTodolistService } from "../../services/useTodolistService";
+import { useTodolistService } from "../../services/useTodolistService";
 
 interface TodolistProps {}
 
@@ -12,13 +12,12 @@ export const Todolist: FunctionComponent<TodolistProps> = () => {
 
     const [items, setItems] = useState<Array<Item>>([]);
     const [itemToAddContent, setItemToAddContent] = useState<string>("");
-    //const { getAllItems } = useTodolistService();
+    const { getAllItems } = useTodolistService();
 
     useEffect(() => {
-        //getAllItems()
-        //    .then(items => setItems(items));
-        setItems([]);
-    },[]);
+        getAllItems()
+            .then(items => setItems(items));        
+    },[getAllItems]);
 
     const handleChangeOnAddItem = (event: React.ChangeEvent<HTMLInputElement>) => {
         setItemToAddContent(event.target.value);
