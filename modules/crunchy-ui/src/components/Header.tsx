@@ -5,19 +5,12 @@ import { Colors } from "../utils/Colors";
 import { RouteDefinition } from "../App.routes";
 import { NavLink } from "react-router-dom";
 import { AuthenticationButtons } from "../auth/buttons/AuthenticationButtons";
-//import { useAuth0 } from "@auth0/auth0-react";
 
 interface HeaderProps {
     routes: RouteDefinition[];
 }
 
 export const Header: FunctionComponent<HeaderProps> = ({routes}) => {
-
-    /*const { isAuthenticated } = useAuth0();
-
-    const routesToDisplay = useMemo(() => {// Only shows the links that don't need auth
-        return isAuthenticated ? routes : routes.filter(route => !route.needAuthentication);
-    }, [isAuthenticated, routes]);*/ // Not needed for now, used when the role protection is active
 
     return (
         <div style={{backgroundColor: Colors.PRIMARY_ORANGE, display: 'flex', justifyContent: 'space-between'}}>

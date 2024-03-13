@@ -1,11 +1,3 @@
-/*export enum CrunchyRoute {
-    HOME = "/",
-    ITEMS = "/items",
-    SETTINGS = "/settings",
-    SETTINGS_PROFILE = "/settings/profile",
-    SETTINGS_ADMIN = "settings/admin",
-}*/
-
 enum Views {
     HOME,
     ITEMS,
