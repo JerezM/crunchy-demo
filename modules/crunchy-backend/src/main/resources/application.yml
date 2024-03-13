@@ -7,6 +7,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: 'https://dev-v2glric2u1lmobml.us.auth0.com/'
+          audiences: 'crunchy-backend-api-springboot'
 
 server:
   servlet:

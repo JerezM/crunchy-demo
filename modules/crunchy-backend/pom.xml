@@ -42,6 +42,18 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Spring Boot Security OAuth2 Resource Server -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-resource-server</artifactId>
+		</dependency>
+
+		<!-- Spring Boot Security OAuth2 Jose -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-jose</artifactId>
+		</dependency>
+
 		<!-- Spring Boot Security Config -->
 		 <dependency>
 			<groupId>org.springframework.security</groupId>
@@ -55,19 +67,12 @@
 			<artifactId>spring-security-web</artifactId>
 			<version>6.2.2</version>
 		</dependency>
-		<!--
-		<!- Spring Boot Starter OAuth2 Client -
+
+		<!-- Spring Boot Starter Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-
-		<!- JSON Web Token Support -
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-		</dependency>
-		-->
 	</dependencies>
 
 	<build>
