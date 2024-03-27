@@ -13,20 +13,24 @@ interface RouteConfigRendererProps {
 export const RouteConfigRenderer: FunctionComponent<RouteConfigRendererProps> = ({routes}) => {
 
     const { containRoles } = useUserRoles();
-    
+
     const getElement = (route: RouteDefinition) => {
-        if (route.element) {
-            return checkAuthenticationWrap(route, route.needAuthentication ?? false);
-        } else {
-            return checkAuthenticationWrap(route, route.needAuthentication ?? false, true);
-        }
+        return checkAuthenticationWrap(route, route.needAuthentication ?? false);
     }
 
-    const checkAuthenticationWrap = (route: RouteDefinition, needAuthentication: boolean, isComponent?: boolean) => {
+    const checkAuthenticationWrap = (route: RouteDefinition, needAuthentication: boolean) => {
+        // Check if it is a component or a element based on the presence of route.Component
+        const isComponent = Boolean(route.Component);
         const RouteComponent = route.Component as React.ComponentType<any>;
+
         if (needAuthentication) {
-            return isComponent ? <AuthenticationGuard component={() => <RouteComponent {...route as any}/> }/> : <AuthenticationGuard component={() => <>{ route.element }</>}/> 
+            return isComponent ?
+                <AuthenticationGuard component={() => <RouteComponent {...route as any}/> }/>
+                :
+                <AuthenticationGuard component={() => <>{ route.element }</>}/>
+            ;
         } else {
+            //If doesn't require auth, render directly the component or the element
             return isComponent ? <RouteComponent {...route as any}/> : route.element;
         }
     }
@@ -44,17 +48,16 @@ export const RouteConfigRenderer: FunctionComponent<RouteConfigRendererProps> = 
                 </Route>
             );
         } else {
-            // If it is a index route, declare twice, once without 'path' and index as true, and the other as usual
-            if (route.isIndex) {                
-                return (<>
-                    <Route key={index} index element={route.element} />
-                    <Route key={index * index} path={route.path} element={getElement(route)/*route.element*/} />
-                    <Route key={index * index + 1} path={'*'} element={<NotFoundPage/>} />
-                </>);
-            } else {
-                // For routes without index, only create a <Route> with a 'path'
-                return <Route key={index} path={route.path} element={getElement(route)/*route.element*/} />;
+            const routes = [<Route key={index} path={route.path} element={getElement(route)} />];
+
+            if (route.isIndex) {
+                // For index routes, ensure they are rendered at the parent path
+                routes.unshift(<Route key={`${index}-index`} index element={route.element} />);
+                // Add a catch-all not-found route specific to this nested route's context
+                routes.push(<Route key={`${index}-notfound`} path="*" element={<NotFoundPage/>} />);
             }
+
+            return <>{routes}</>;
         }
     }
 
@@ -64,7 +67,7 @@ export const RouteConfigRenderer: FunctionComponent<RouteConfigRendererProps> = 
                 createTree(route, index)
             ))}
             <Route path={'/callback'} element={<CallbackPage/>} />
-            <Route path={'/not-found'} element={<NotFoundPage/>}/>
+            {/*<Route path={'/not-found'} element={<NotFoundPage/>}/>*/}
             <Route path={'*'} element={<NotFoundPage/>}/>          
         </Routes>        
     );

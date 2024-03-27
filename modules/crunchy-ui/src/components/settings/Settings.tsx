@@ -4,7 +4,7 @@ import { TText } from "../utils/Texts";
 import { TextType } from "../../model/utils/TextType";
 import { Colors } from "../../utils/Colors";
 import { useEffect, useMemo } from "react";
-import { CrunchyPaths, Views } from "../../routing/Routes";
+import { Views, getPath } from "../../routing/Routes";
 import { useUserRoles } from "../../hooks/useUserRoles";
 
 interface SettingsProps {
@@ -28,12 +28,12 @@ export default function Settings({routes}: SettingsProps) {
 
     useEffect(() => {
         // Redirect to /settings/profile automatically when route 'settings' is loaded
-        if (location.pathname === CrunchyPaths.getPath(Views.SETTINGS)) {
-            navigate(CrunchyPaths.getPath(Views.PROFILE), { replace: true });
+        if (location.pathname === getPath(Views.SETTINGS)) {
+            navigate(getPath(Views.PROFILE), { replace: true });
         }
 
-        /*if (location.pathname === CrunchyPaths.getPath(Views.ADMIN) && (areRolesLoaded && !isAdminUser)) {
-            navigate(CrunchyPaths.getPath(Views.NOT_FOUND));
+        /*if (location.pathname === getPath(Views.ADMIN) && (areRolesLoaded && !isAdminUser)) {
+            navigate(getPath(Views.NOT_FOUND));
 
             // Keeps the original URL in the address bar
             window.history.replaceState({}, '', location.pathname);
@@ -45,7 +45,7 @@ export default function Settings({routes}: SettingsProps) {
             <div style={{ width: '250px', backgroundColor: Colors.SIDE_BAR, padding: '20px', display: 'flex', flexDirection: 'column'}}>
                 {routesToDisplay.map((route, index) => (
                     <NavLink key={index} to={route.path?.toString() as string} style={{textDecoration: 'none', marginBottom: '5px'}}>
-                        <TText type={TextType.HEADER2} style={{color: "white", textAlign: 'center'}}>{route.routeResource?.label}</TText>
+                        <TText type={TextType.HEADER2} style={{color: "white", textAlign: 'center'}}>{route.label}</TText>
                     </NavLink>
                 ))}                                        
             </div>
